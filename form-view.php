@@ -5,6 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="index.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" type="text/css"
           rel="stylesheet"/>
     <title>Order food & drinks</title>
@@ -25,7 +26,22 @@
     <form method="post">
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="email">E-mail:</label>
+
+              <label for="email">E-mail:</label>
+                    <label class="error">
+                        <?php
+                        function email_validation($str) {
+                            return (!preg_match(
+                                "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^", $str))
+                                ? FALSE : TRUE;
+                        }
+
+                        if(email_validation($_POST['email']) == false) {
+                            echo 'Must provide valid email';
+                        }
+
+                        ?>
+                    </label>
                 <input type="text" id="email" name="email" class="form-control"/>
             </div>
             <div></div>
@@ -61,7 +77,7 @@
             <?php foreach ($products AS $i => $product): ?>
                 <label>
                     <input type="checkbox" value="1" name="products[<?php echo $i ?>]"/> <?php echo $product['name'] ?> -
-                    &euro; <?php echo number_format($product['price'], 2) ?></label><br />
+                    &euro <?php echo number_format($product['price'], 2) ?></label><br />
             <?php endforeach; ?>
         </fieldset>
 
