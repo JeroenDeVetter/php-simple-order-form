@@ -1,5 +1,9 @@
 .error {
     color:red;
     text-align: right;
-  
+
+}
+
+input {
+    max-width: 500px;
 }
