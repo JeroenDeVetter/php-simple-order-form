@@ -1,15 +1,11 @@
 <?php
 //this line makes PHP behave in a more strict way
-
-
-
-//include Chrome Log Exaction
-include "/var/www/becode/ChromePhp.php";
+ini_set('display_errors', "1");
+ini_set('display_startup_errors', "1");
+error_reporting(E_ALL);
 
 //we are going to use session variables so we need to enable sessions
 session_start();
-
-ChromePhp::log($_SERVER['REQUEST_URI']);
 
 //function for input if valid
 function input($string) {
@@ -25,13 +21,6 @@ function Number_Validation($strng3) {
         ? FALSE : TRUE;
 }
 
-//validation email
-function email_validation($str) {
-    return (!preg_match(
-        "^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$^", $str))
-        ? FALSE : TRUE;
-}
-
 //validation for zip
 function zip_validation($str1) {
         return (!preg_match(
@@ -39,27 +28,34 @@ function zip_validation($str1) {
             ? FALSE : TRUE;
 }
 
+
 //your products with their price.
-$Breath = [
-    ['name' => 'Club Ham', 'price' => 3.20],
-    ['name' => 'Club Cheese', 'price' => 3],
-    ['name' => 'Club Cheese & Ham', 'price' => 4],
-    ['name' => 'Club Chicken', 'price' => 4],
-    ['name' => 'Club Salmon', 'price' => 5]
-];
-
-ChromePhp::log($Breath[0]['price']);
-
-$Drinks = [
-    ['name' => 'Cola', 'price' => 2],
-    ['name' => 'Fanta', 'price' => 2],
-    ['name' => 'Sprite', 'price' => 2],
-    ['name' => 'Ice-tea', 'price' => 3],
-];
-
-//email validation
 
 
+
+$currentTotalValue = 0;
+$totalValue = 0;
+   $Breath = [
+    'products' => [
+        ['name' => 'Club Ham', 'price' => 3.20],
+        ['name' => 'Club Cheese', 'price' => 3],
+        ['name' => 'Club Cheese & Ham', 'price' => 4],
+        ['name' => 'Club Chicken', 'price' => 4],
+        ['name' => 'Club Salmon', 'price' => 5]
+    ]
+   ];
+
+ $Drinks =[
+    'products' => [
+        ['name' => 'Cola', 'price' => 2],
+        ['name' => 'Fanta', 'price' => 2],
+        ['name' => 'Sprite', 'price' => 2],
+        ['name' => 'Ice-tea', 'price' => 3]
+      ]
+    ];
+
+ $checkboxState = '';
+ $state = [];
 
 function whatIsHappening() {
     echo '<h2>$_GET</h2>';
@@ -78,7 +74,13 @@ if(!isset($_POST['products[0]']) ) {
 
 }
 
-$totalValue = 0;
+
+
+
+
 
 include 'form-view.php';
+
+
 whatIsHappening();
+?>

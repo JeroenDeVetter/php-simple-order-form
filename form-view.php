@@ -34,7 +34,10 @@
                     <?php
 
                          if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-                             if(email_validation($_POST['email']) == false && $_POST['email']=="") {
+                             if(filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+
+                             }
+                             else {
                                  echo 'Must provide valid email';
                                  $_SESSION['street'] = '';
                              }
@@ -119,30 +122,54 @@
         <fieldset>
             <legend>Products</legend>
             <?php
-
             switch ($_SERVER['REQUEST_URI']) {
-
                 case '/php-simple-order-form/index.php?foot0':
-                    foreach ($Breath as $i => $product) {
+                    foreach ($Breath['products'] as $i => $product) {
+
                         echo '<label>';
                         echo "<input type='checkbox' value='1' name='products[$i]'/> ";
                         echo $product['name'];
                         echo '- &euro; ';
                         echo number_format($product['price'], 2) . '</label><br />';
                     }
-                    break;
+                    $currentTotalValue = 0;
+                    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                        foreach ($_POST['products'] AS $i => $product) {
+                            $currentTotalValue += $Breath['products'][$i]['price'];
+                        }
+                        if (isset($_COOKIE['totalValue'])){
+                            $totalValue = (int)$_COOKIE['totalValue'];
+                        }
+                        $totalValue += $currentTotalValue;
+                        setcookie('totalValue', (string)$totalValue , time()+5);
 
+                    }
+                    break;
                 default :
-                    foreach ($Drinks as $i => $product) {
+                    foreach ($Drinks['products'] as $i => $product) {
                         echo '<label>';
-                        echo "<input type='checkbox' value='1' name='products[$i]'/> ";
+                        echo "<input type='checkbox' $checkboxState value='1' name='products[$i]'/> ";
                         echo $product['name'];
                         echo '- &euro; ';
                         echo number_format($product['price'], 2) . '</label><br />';
                     }
+                    $currentTotalValue = 0;
+                    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                        foreach ($_POST['products'] AS $i => $product) {
+                            $currentTotalValue += $Drinks['products'][$i]['price'];
+
+                        }
+                        if (isset($_COOKIE['totalValue'])){
+                            $totalValue = (int)$_COOKIE['totalValue'];
+                            array_push($state , $_SESSION['clicked'] = 'clicked');
+                        }
+                        $totalValue += $currentTotalValue;
+                        $checkboxState = $_SESSION['state'];
+                        var_dump($state);
+                        setcookie('totalValue', (string)$totalValue, time()+20);
+
+                    }
                     break;
-
-
             }
             ?>
         </fieldset>
@@ -154,11 +181,14 @@
             $_SESSION['streednr'] = $_POST['streetnumber'];
             $_SESSION['city'] = $_POST['city'];
             $_SESSION['zipcode'] = $_POST['zipcode'];
+
+
         }?>
         </button>
     </form>
 
     <footer>You already ordered <strong>&euro; <?php echo $totalValue ?></strong> in food and drinks.</footer>
+
 </div>
 
 <style>
