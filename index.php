@@ -1,4 +1,6 @@
 <?php
+
+
 //this line makes PHP behave in a more strict way
 ini_set('display_errors', "1");
 ini_set('display_startup_errors', "1");
@@ -6,6 +8,8 @@ error_reporting(E_ALL);
 
 //we are going to use session variables so we need to enable sessions
 session_start();
+
+
 
 //function for input if valid
 function input($string) {
@@ -30,9 +34,8 @@ function zip_validation($str1) {
 
 
 //your products with their price.
-
-
-
+$currentHour = date('H:i');
+$deriveryTime = '';
 $currentTotalValue = 0;
 $totalValue = 0;
    $Breath = [
